@@ -5,10 +5,11 @@ const Bread = require('../models/bread.js')
 // Index
 breads.get('/', (req, res) => {
 //res.send(Bread)
-res.render('index')
+    res.render('index', {breads: Bread})
 })
 
 breads.get('/:arrayIndex', (req, res) =>{
+    // res.render('index',{breads: Bread[req.params.arrayIndex]})
     res.send(bread[req.params.arrayIndex])
 })
 
