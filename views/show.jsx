@@ -9,8 +9,8 @@ function Show ({bread}) {
             </h3>
             <p>This bread
                 {
-                    <bread "hasGluten">
-                        / <spam>does</spam>
+                    bread.hasGluten
+                        ? <spam>does</spam>
                         : <span>does not</span>
                 }
                 have gluten
