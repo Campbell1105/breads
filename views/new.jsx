@@ -28,7 +28,9 @@ function New () {
           <br />
           <input type="submit"/>
         </form>
-        <div className="button"></div>
+        <div className="button">
+            <a href="/breads">Go back to the index<button></a>
+        </div>
       </Default>
     )
 }
