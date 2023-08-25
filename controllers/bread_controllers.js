@@ -32,10 +32,16 @@ breads.get("/:arrayIndex", (req, res) => {
   if (Bread[req.params.arrayIndex]) {
     res.render("show", {
       bread: Bread[req.params.arrayIndex],
+      index: req.params.arrayIndex
     });
   } else {
     res.send("404");
   }
 });
+
+breads.delete('/:arrayIndex', (req, res) => {
+    Bread.splice(req.params.arrayIndex, 1)
+    res.status(303).redirect("/breads")
+})
 
 module.export = breads;
