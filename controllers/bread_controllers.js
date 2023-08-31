@@ -1,66 +1,72 @@
-const express = require("express");
-const breads = express.Router();
-const Bread = require("../models/bread.js");
+const express = require('express')
+const breads = express.Router()
+const Bread = require('../models/bread.js')
 
-// Index
-breads.get("/", (req, res) => {
-  //res.send(Bread)
-  res.render("index", { breads: Bread });
-});
+//INDEX
+breads.get('/', (req, res) => {
+    Bread.find()
+        .then(foundBreads => {
+            res.render('index', {
+                breads: foundBreads,
+                title: 'Index Page'
+            })
+        })
+})
 
 // CREATE
 breads.post('/', (req, res) => {
-  if (!req.body.image) {
-    req.body.image = 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
-  }
-  if(req.body.hasGluten === 'on') {
-    req.body.hasGluten = true
-  } else {
-    req.body.hasGluten = false
-  }
-  Bread.push(req.body)
-  res.redirect('/breads')
-})
-
+    if (!req.body.image) {
+      req.body.image = undefined
+    }
+    if(req.body.hasGluten === 'on') {
+      req.body.hasGluten = true
+    } else {
+      req.body.hasGluten = false
+    }
+    Bread.create(req.body)
+    res.redirect('/breads')
+  })
+  
 
 breads.get('/new', (req, res) => {
-  res.render('new')
-});
-
-// Show
-breads.get("/:arrayIndex", (req, res) => {
-  if (Bread[req.params.arrayIndex]) {
-    res.render("show", {
-      bread: Bread[req.params.arrayIndex],
-      index: req.params.arrayIndex
-    });
-  } else {
-    res.send("404");
-  }
-});
-
-breads.edit('/:arrayIndex', (req, res) => {
-  res.render('show', {
-    bread: Bread[req.params.arrayIndex],
-    index:req.params.arrayIndex
-  })
+    res.render('new')
 })
 
+breads.get('/:arrayIndex/edit', (req, res) => {
+    console.log("Edit page")
+    res.render('edit', {
+        bread: Bread[req.params.arrayIndex],
+        index: req.params.arrayIndex
+    })
+})
+
+breads.get('/:id', (req, res) => {
+    Bread.findById(req.params.id)
+        .then(foundBread => {
+            res.render('show', {
+                bread: foundBread
+            })
+        }).catch(err => {
+            res.status(404).render('404')
+        })
+})
+
+
+
+// UPDATE
 breads.put('/:arrayIndex', (req, res) => {
-  if(req.body.hasGluten === 'on') {
-    req.body.hasGluten = true
-  } else {
-    req.body.hasGluten = false
-  }
-  Bread[req.params.arrayIndex] = req.body
-  res.redirect(`/breads/${req.params.arrayIndex}`)
+    if(req.body.hasGluten === 'on') {
+        req.body.hasGluten = true
+    } else {
+        req.body.hasGluten = false
+    }
+    Bread[req.params.arrayIndex] = req.body
+    res.redirect(`/breads/${req.params.arrayIndex}`)
 })
 
 breads.delete('/:arrayIndex', (req, res) => {
     Bread.splice(req.params.arrayIndex, 1)
-    res.status(303).redirect("/breads")
+    res.status(303).redirect('/breads')
 })
 
-
-
-module.export = breads;
+module.exports = breads
