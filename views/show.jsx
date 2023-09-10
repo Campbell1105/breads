@@ -1,34 +1,46 @@
 const React = require('react')
 const Default = require('./layouts/default')
 
-function Show ({bread, index}) {
-    console.log(bread.name)
-
+function New ({bakers}) {
     return (
-        <Default>
-            <h3>
-                {bread.name}
-            </h3>
-            <p>
-                This bread
-                {
-                    bread.hasGluten
-                    ? <span> does </span>
-                    : <span> does not </span>
-                }
-                have gluten.
-            </p>
-            <img src={bread.image} alt={bread.name} />
-            <p>{breadGetBakedBy}</p>
-            <p>This {bread.name} was baked with love by {bread.baker}</p>
-            <a href={`/breads/${bread.id}/edit`}><button>Edit</button></a>
-            <form method="POST" action={`/breads/${bread.id}?_method=DELETE`}>
-                <input type="submit" value="DELETE"/>
-            </form>
-
-            <li><a href="/breads">Go home</a></li>
-        </Default>
+      <Default>
+        <h2>Add a new bread</h2>
+        <form action="/breads" method="POST">
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            required
+          />
+          <label htmlFor="image">Image</label>
+          <input
+            type="text"
+            name="image"
+            id="image"/>
+          <label htmlFor="baker">Baker</label>
+          <select name="baker" id="baker">
+            {bakers.map((baker) => {
+                return (
+                  <option value={baker.id} key={baker.id}>{baker.name}</option>
+                )
+            })}
+          </select>
+          <label htmlFor="hasGluten">Has Gluten?</label>
+          <input
+            type="checkbox"
+            name="hasGluten"
+            id="hasGluten"
+            defaultChecked
+          />
+          <br />
+          <input type="submit"/>
+        </form>
+        <div className='backButton'>
+            <a href="/breads">Go back to the index</a>
+        </div>
+      </Default>
     )
 }
 
-module.exports = Show
+module.exports = New
